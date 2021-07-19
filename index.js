@@ -223,20 +223,7 @@ const plugin = {
     cacheFolder: "/images/sizes/", // relative to root dir
     scales: [],
     svg: false,
-    placeholder: {
-      resize: {
-        width: 10,
-        fit: sharp.fit.cover,
-      },
-      jpeg: {
-        quality: 50,
-        progressive: true,
-        optimizeScans: true,
-        chromaSubsampling: "4:2:0",
-        trellisQuantisation: true,
-        quantisationTable: 2,
-      },
-    },
+    placeholder: false,
     quality: 70,
     cssString: `.ejs {display: block;position: relative;height: 0;width: 100%;}
     .ejs img.lazy{position: absolute;top: 0;left: 0;width: 100%;height: 100%;display: block;}
