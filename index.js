@@ -211,12 +211,7 @@ const plugin = {
   config: {
     debug: false,
     s3: undefined,
-    folders: [
-      {
-        src: "/images/*", // where your original images are. Relative to rootDir/process.cwd() defined in your elder.config.js.
-        output: "/images/", // where files should be put within the distDir defined in your elder.config.js.
-      },
-    ],
+    folders: [],
     widths: [], // Sizes the images will be resized to.
     fileTypes: ["webp"], // file types in addition to jpeg/png
     imageManifest: "/images/ejs-image-manifest.json", // relative to root dir or can be an async function to pull a manifest from a db.
