@@ -386,6 +386,7 @@ const plugin = {
       run: ({ props, plugin, request }) => {
         const { src, ...options } = props;
 
+        console.log(props, "PROPS");
         if (!src) {
           throw new Error(
             `elderjs-plugin-images: picture shortcode requires src. ${JSON.stringify(

@@ -1,4 +1,9 @@
-const { getLargest, getSrcsets, getSmallest, getSources } = require('./helpers');
+const {
+  getLargest,
+  getSrcsets,
+  getSmallest,
+  getSources,
+} = require("./helpers");
 
 const imageStore = (manifest, plugin) => {
   return {
@@ -14,8 +19,15 @@ const imageStore = (manifest, plugin) => {
     picture: function picture(path, opts) {
       try {
         // maxWidth, the largest resolution this should ever display.
-        const { maxWidth, class: classStr, alt, wrap } = { maxWidth: 2000, class: '', alt: '', ...opts };
+        const {
+          maxWidth,
+          class: classStr,
+          alt,
+          wrap,
+        } = { maxWidth: 2000, class: "", alt: "", ...opts };
         const file = manifest[path];
+
+        console.log(file, "File");
 
         plugin.shouldAddCodeDependencies = true;
 
@@ -24,23 +36,34 @@ const imageStore = (manifest, plugin) => {
         const { sizes, srcsets } = getSrcsets({
           maxWidth,
           fileSizes: file.sizes,
-          key: plugin.config.s3 && plugin.config.s3.USE_S3_HOSTING ? 's3' : 'relative',
+          key:
+            plugin.config.s3 && plugin.config.s3.USE_S3_HOSTING
+              ? "s3"
+              : "relative",
         });
         const sources = getSources(sizes, srcsets);
 
-        let picture = `<picture class="${classStr ? ` ${classStr}` : ''}">`;
+        let picture = `<picture class="${classStr ? ` ${classStr}` : ""}">`;
 
-        picture += sources.webp.reduce((out, cv) => `${out}${cv}`, '');
+        picture += sources.webp.reduce((out, cv) => `${out}${cv}`, "");
 
-        if (file.format === 'jpeg') picture += sources.jpeg.reduce((out, cv) => `${out}${cv}`, '');
-        if (file.format === 'png') picture += sources.png.reduce((out, cv) => `${out}${cv}`, '');
+        if (file.format === "jpeg")
+          picture += sources.jpeg.reduce((out, cv) => `${out}${cv}`, "");
+        if (file.format === "png")
+          picture += sources.png.reduce((out, cv) => `${out}${cv}`, "");
 
-        picture += `<img src="${file.placeholder}"${alt.length > 0 ? ` alt="${alt}"` : ''} class="lazy blur-up">`;
+        picture += `<img src="${file.placeholder}"${
+          alt.length > 0 ? ` alt="${alt}"` : ""
+        } class="lazy blur-up">`;
 
         picture += `</picture>`;
 
         let pictureWithWrap = `<div class="ejs" ${
-          plugin.addStyles ? `style="padding-bottom: ${Math.round((file.height / file.width) * 10000) / 100}%;"` : ''
+          plugin.addStyles
+            ? `style="padding-bottom: ${
+                Math.round((file.height / file.width) * 10000) / 100
+              }%;"`
+            : ""
         }>`;
 
         if (plugin.config.placeholder) {
@@ -62,8 +85,10 @@ const imageStore = (manifest, plugin) => {
         return pictureWithWrap;
       } catch (e) {
         if (e.message.includes("'sizes' of undefined")) {
-          console.log('manifest keys', Object.keys(manifest));
-          throw new Error(`Cannot find source image with ${path} in manifest. (logged above)`);
+          console.log("manifest keys", Object.keys(manifest));
+          throw new Error(
+            `Cannot find source image with ${path} in manifest. (logged above)`
+          );
         } else {
           throw e;
         }
